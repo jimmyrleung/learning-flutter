@@ -11,6 +11,9 @@ class LoginScreenState extends State<LoginScreen> {
   // Global key to the FormState of our Form
   final formKey = GlobalKey<FormState>();
 
+  String email = '';
+  String password = '';
+
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.all(20.0),
@@ -42,12 +45,15 @@ class LoginScreenState extends State<LoginScreen> {
         hintText: 'your@email.com',
       ),
       validator: (String value) {
-        if(!value.contains('@')) {
+        if (!value.contains('@')) {
           return 'Please enter a valid e-mail.';
         }
 
         // null indicates that the field is valid - it can be omitted
         return null;
+      },
+      onSaved: (String value) {
+        email = value;
       },
     );
   }
@@ -60,11 +66,14 @@ class LoginScreenState extends State<LoginScreen> {
         hintText: 'your strong password',
       ),
       validator: (String value) {
-        if(value.length < 4) {
+        if (value.length < 4) {
           return 'Password must have at least 4 characters.';
         }
 
         return null;
+      },
+      onSaved: (String value) {
+        password = value;
       },
     );
   }
@@ -72,9 +81,16 @@ class LoginScreenState extends State<LoginScreen> {
   Widget submitButton() {
     return RaisedButton(
       onPressed: () {
-        // check all 'validator' property from each children form component
+        // trigger and check all 'validator' properties from each children form component
         final bool isValid = formKey.currentState.validate();
-        print(isValid);
+
+        if (isValid) {
+          // trigger all 'onSaved' properties from each children form component
+          formKey.currentState.save();
+
+          // Now our data has successfully been retrieved
+          print('E-mail: $email - Password: $password');
+        }
       },
       child: Text('Login'),
       color: Colors.blue,
