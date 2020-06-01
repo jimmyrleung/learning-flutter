@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../mixins/validation_mixin.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -7,7 +8,8 @@ class LoginScreen extends StatefulWidget {
   }
 }
 
-class LoginScreenState extends State<LoginScreen> {
+// Extending all from State<LoginScreen> and ValidationMixin
+class LoginScreenState extends State<LoginScreen> with ValidationMixin {
   // Global key to the FormState of our Form
   final formKey = GlobalKey<FormState>();
 
@@ -44,14 +46,7 @@ class LoginScreenState extends State<LoginScreen> {
         labelText: 'E-mail',
         hintText: 'your@email.com',
       ),
-      validator: (String value) {
-        if (!value.contains('@')) {
-          return 'Please enter a valid e-mail.';
-        }
-
-        // null indicates that the field is valid - it can be omitted
-        return null;
-      },
+      validator: validateEmail,
       onSaved: (String value) {
         email = value;
       },
@@ -65,13 +60,7 @@ class LoginScreenState extends State<LoginScreen> {
         labelText: 'Password',
         hintText: 'your strong password',
       ),
-      validator: (String value) {
-        if (value.length < 4) {
-          return 'Password must have at least 4 characters.';
-        }
-
-        return null;
-      },
+      validator: validatePassword,
       onSaved: (String value) {
         password = value;
       },
@@ -88,7 +77,8 @@ class LoginScreenState extends State<LoginScreen> {
           // trigger all 'onSaved' properties from each children form component
           formKey.currentState.save();
 
-          // Now our data has successfully been retrieved
+          // Now our data has successfully been retrieved and we can
+          // safely use that data
           print('E-mail: $email - Password: $password');
         }
       },
