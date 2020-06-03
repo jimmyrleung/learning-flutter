@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../blocs/bloc.dart';
 
 class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
@@ -17,24 +18,44 @@ class LoginScreen extends StatelessWidget {
   }
 
   Widget emailField() {
-    return TextField(
-      keyboardType: TextInputType.emailAddress,
-      decoration: InputDecoration(
-        hintText: 'your@email.com',
-        labelText: 'E-mail',
-        errorText: null,
-      ),
+    // The StreamBuilder is a widget that links our Widgets
+    // to a specific stream
+    return StreamBuilder(
+      // The stream we want to link to our textField
+      stream: bloc.email,
+
+      // The function that build and re-build our component
+      // whenever the stream has an update
+      // The snapshot has the value that came across the stream
+      // including errors
+      builder: (context, snapshot) {
+        return TextField(
+          onChanged: bloc.changeEmail,
+          keyboardType: TextInputType.emailAddress,
+          decoration: InputDecoration(
+            hintText: 'your@email.com',
+            labelText: 'E-mail',
+            errorText: snapshot.error,
+          ),
+        );
+      },
     );
   }
 
   Widget passwordField() {
-    return TextField(
-      obscureText: true,
-      decoration: InputDecoration(
-        hintText: 'your password',
-        labelText: 'Password',
-        errorText: null,
-      ),
+    return StreamBuilder(
+      stream: bloc.password,
+      builder: (context, snapshot) {
+        return TextField(
+          onChanged: bloc.changePassword,
+          obscureText: true,
+          decoration: InputDecoration(
+            hintText: 'your password',
+            labelText: 'Password',
+            errorText: snapshot.error,
+          ),
+        );
+      },
     );
   }
 

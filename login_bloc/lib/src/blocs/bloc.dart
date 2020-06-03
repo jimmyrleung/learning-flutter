@@ -26,3 +26,8 @@ class Bloc with Validators {
     _password.close();
   }
 }
+
+// This works like a singleton: wherever you import that file,
+// you will only have access to that instance of Bloc instead of
+// the Bloc class
+final bloc = Bloc();
