@@ -22,6 +22,7 @@ class LoginScreen extends StatelessWidget {
       decoration: InputDecoration(
         hintText: 'your@email.com',
         labelText: 'E-mail',
+        errorText: null,
       ),
     );
   }
@@ -32,6 +33,7 @@ class LoginScreen extends StatelessWidget {
       decoration: InputDecoration(
         hintText: 'your password',
         labelText: 'Password',
+        errorText: null,
       ),
     );
   }
