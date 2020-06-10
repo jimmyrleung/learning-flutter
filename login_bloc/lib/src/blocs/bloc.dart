@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'validators.dart';
+import 'package:rxdart/rxdart.dart';
 
 // in the course, 'with' without extends do not work
 // so if that not works, use class Bloc extends Object with Validatorss
@@ -13,6 +14,11 @@ class Bloc with Validators {
   // Notice that we return the transformed stream
   Stream<String> get email => _email.stream.transform(validateEmail);
   Stream<String> get password => _password.stream.transform(validatePassword);
+
+  // When we get a valid email and a valid password, this function will return true
+  // If needed, we could combine the email and the password, but in this case we just want
+  // both of them valid
+  Stream<bool> get submitValid => Observable.combineLatest2(email, password, (e, p) => true);
 
   // Change data - Getters
   Function(String) get changeEmail => _email.sink.add;
