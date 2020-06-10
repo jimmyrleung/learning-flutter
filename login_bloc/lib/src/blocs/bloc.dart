@@ -7,8 +7,8 @@ import 'package:rxdart/rxdart.dart';
 class Bloc with Validators {
   // Make sure that our stream controller's deal with strings
   // underscores make properties 'private'
-  final _email = StreamController<String>();
-  final _password = StreamController<String>();
+  final _email = StreamController<String>.broadcast();
+  final _password = StreamController<String>.broadcast();
 
   // Retrieve data from stream - Getters
   // Notice that we return the transformed stream
@@ -30,7 +30,7 @@ class Bloc with Validators {
   dispose() { 
     _email.close();
     _password.close();
-  }
+  } 
 }
 
 // This works like a singleton: wherever you import that file,
