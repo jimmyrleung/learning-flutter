@@ -38,23 +38,33 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
         title: Text('Cat animation!'),
       ),
       body: GestureDetector(
-        child: buildAnimation(),
+        child: Center(
+          child: Stack(
+            // Pay attention here, the order matters
+            children: <Widget>[
+              buildCatAnimation(),
+              buildBox(),
+            ],
+          ),
+        ),
         onTap: onTap,
       ),
     );
   }
 
   onTap() {
-    if (catController.status == AnimationStatus.completed) { //Stopped at the end
+    if (catController.status == AnimationStatus.completed) {
+      //Stopped at the end
       // Reverse the animation
       catController.reverse();
-    } else if (catController.status == AnimationStatus.dismissed){ // Stopped at the beginning
+    } else if (catController.status == AnimationStatus.dismissed) {
+      // Stopped at the beginning
       // triggers the animation
       catController.forward();
     }
   }
 
-  Widget buildAnimation() {
+  Widget buildCatAnimation() {
     return AnimatedBuilder(
       animation: catAnimation,
 
@@ -77,6 +87,22 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
       // animate, so flutter will generate a single instance and the animation builder will
       // only change its properties (like its position, color, size, etc)
       child: Cat(),
+    );
+  }
+
+  Widget buildBox() {
+    return Container(
+      height: 200.0,
+      width: 200.0,
+      // color: Colors.brown,
+      decoration: BoxDecoration(
+        color: Colors.brown,
+        border: Border.all(
+          width: 2.0,
+          color: Colors.grey,
+          style: BorderStyle.solid,
+        ),
+      ),
     );
   }
 }
