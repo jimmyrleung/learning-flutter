@@ -30,9 +30,6 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
         curve: Curves.easeIn,
       ),
     );
-
-    // starts our animation
-    catController.forward();
   }
 
   Widget build(BuildContext context) {
@@ -40,8 +37,21 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
       appBar: AppBar(
         title: Text('Cat animation!'),
       ),
-      body: buildAnimation(),
+      body: GestureDetector(
+        child: buildAnimation(),
+        onTap: onTap,
+      ),
     );
+  }
+
+  onTap() {
+    if (catController.status == AnimationStatus.completed) { //Stopped at the end
+      // Reverse the animation
+      catController.reverse();
+    } else if (catController.status == AnimationStatus.dismissed){ // Stopped at the beginning
+      // triggers the animation
+      catController.forward();
+    }
   }
 
   Widget buildAnimation() {
