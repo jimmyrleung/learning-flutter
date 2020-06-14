@@ -21,7 +21,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
     );
 
     // Tween: position configuration - initial: 0px, end: 100px
-    catAnimation = Tween(begin: 0.0, end: 100.0).animate(
+    catAnimation = Tween(begin: 50.0, end: 300.0).animate(
       // CurvedAnimation specifies the rate that our animation will change
       // In this case we gonna use the duration configuration of the catController
       // And the animation will be the easeIn (starts slow and end quickly)
@@ -38,8 +38,12 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
         title: Text('Cat animation!'),
       ),
       body: GestureDetector(
+        // Align the stack container in the center of the screen
+        // nOTE: the center widget tries to fit the whole screen
         child: Center(
           child: Stack(
+            // align the items inside our stack in the center of this widget
+            alignment: Alignment.center,
             // Pay attention here, the order matters
             children: <Widget>[
               buildCatAnimation(),
@@ -76,7 +80,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
           child: child,
           // As long the animation goes, we need to change its margin
           // otherwise our cat would be out of the screen
-          margin: EdgeInsets.only(top: catAnimation.value),
+          margin: EdgeInsets.only(bottom: catAnimation.value),
         );
       },
 
