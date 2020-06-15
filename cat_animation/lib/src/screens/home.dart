@@ -15,13 +15,13 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
 
     catController = AnimationController(
       duration:
-          Duration(seconds: 2), // How many seconds the animation will last
+          Duration(milliseconds: 400), // How many seconds the animation will last
       vsync:
           this, // it means that this class is dealing with the animation and has the ticket provider mixin
     );
 
     // Tween: position configuration - initial: 0px, end: 100px
-    catAnimation = Tween(begin: 50.0, end: 300.0).animate(
+    catAnimation = Tween(begin: -35.0, end: -85.0).animate(
       // CurvedAnimation specifies the rate that our animation will change
       // In this case we gonna use the duration configuration of the catController
       // And the animation will be the easeIn (starts slow and end quickly)
@@ -49,6 +49,11 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
               buildCatAnimation(),
               buildBox(),
             ],
+
+            // by default, the stack widget clips any content that overflow
+            // its bounds. When you want to use positioning (like that case)
+            // you probably want to set this to visible
+            overflow: Overflow.visible,
           ),
         ),
         onTap: onTap,
@@ -76,11 +81,20 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
       builder: (context, child) {
         // if cat were declarated here, it would be re-created
         // everytime.
-        return Container(
+
+        // Positioned is similar to position absolute, relative, etc
+        // Margins are bad because they change the container size (height/width)
+        // But positioning can be challenging too, because it means that the
+        // container won't consider the child element size (that's why we set)
+        // the Overflow to 'visible'
+        return Positioned(
           child: child,
-          // As long the animation goes, we need to change its margin
-          // otherwise our cat would be out of the screen
-          margin: EdgeInsets.only(bottom: catAnimation.value),
+          top: catAnimation.value,
+
+          // left and right 0.0 makes the positioned (and its content)
+          // shrink and fit inside the parent container (stack)
+          left: 0.0,
+          right: 0.0,
         );
       },
 
