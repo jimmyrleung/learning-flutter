@@ -2,13 +2,13 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:path/path.dart';
-import 'dart:async';
 import '../models/item_model.dart';
+import 'dart:async';
 
 class NewsDbProvider {
   Database db;
 
-  init() async {
+  void init() async {
     // return a reference to a folder in our mobile devices
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
 
@@ -42,7 +42,7 @@ class NewsDbProvider {
     });
   }
 
-  fetchItem(int id) async {
+  Future<ItemModel> fetchItem(int id) async {
     final maps = await db.query('items',
         columns:
             null, // to fetch all the columns we set null instead of an array of string
@@ -60,7 +60,7 @@ class NewsDbProvider {
 
   // We won't wait for the item to be added, so we are not
   // going to mark it as async
-  addItem(ItemModel item) {
-    db.insert('items', item.toMapForDb());
+  Future<int> addItem(ItemModel item) {
+    return db.insert('items', item.toMapForDb());
   }
 }
