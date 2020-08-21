@@ -9,6 +9,10 @@ import 'news_repository.dart';
 class NewsDbProvider implements Source, Cache {
   Database db;
 
+  NewsDbProvider() {
+    init();
+  }
+
   void init() async {
     // return a reference to a folder in our mobile devices
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
@@ -70,4 +74,10 @@ class NewsDbProvider implements Source, Cache {
   Future<List<int>> fetchTopIds() {
     return null;
   }
+
 }
+
+// This works like a singleton
+// SQLite wont allow us to open multiple connections 
+// because it works in a file
+final newsDbProvider = NewsDbProvider();

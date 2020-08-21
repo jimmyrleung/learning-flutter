@@ -3,6 +3,7 @@ import 'news_api_provider.dart';
 import 'news_db_provider.dart';
 import '../models/item_model.dart';
 
+// Abstract classes in flutter works as interfaces
 abstract class Cache {
   Future<int> addItem(ItemModel item);
 }
@@ -13,23 +14,41 @@ abstract class Source {
 }
 
 class NewsRepository {
-  NewsDbProvider dbProvider = NewsDbProvider();
-  NewsApiProvider apiProvider = NewsApiProvider();
+  List<Source> sources = <Source>[
+    newsDbProvider,
+    NewsApiProvider(),
+  ];
+
+  List<Cache> caches = <Cache>[
+    newsDbProvider,
+  ];
 
   Future<List<int>> fetchTopIds() {
-    return apiProvider.fetchTopIds();
+    // since our newsDbProvider has a fake 'fetchTopIds'
+    // we'll call the apiProvider directly
+    // but in a real project situation we would do the 
+    // for source in sources solution
+    return sources[1].fetchTopIds();
   }
 
   Future<ItemModel> fetchItem(int id) async {
-    var item = await dbProvider.fetchItem(id);
+    ItemModel item;
+    Source source;
 
-    // if we find it locally, we early return it
-    if (item != null) {
-      return item;
+    // will look in each source (in the sources order) and 
+    // call fetchItem until it finds a valid item
+    for(source in sources) {
+      // null or the item
+      item = await source.fetchItem(id);
+
+      if(item != null) {
+        break;
+      }
     }
 
-    item = await apiProvider.fetchItem(id);
-    dbProvider.addItem(item);
+    for (var cache in caches) {
+      cache.addItem(item);
+    }
 
     return item;
   }
