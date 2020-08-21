@@ -4,8 +4,9 @@ import 'dart:io';
 import 'package:path/path.dart';
 import '../models/item_model.dart';
 import 'dart:async';
+import 'news_repository.dart';
 
-class NewsDbProvider {
+class NewsDbProvider implements Source, Cache {
   Database db;
 
   void init() async {
@@ -62,5 +63,11 @@ class NewsDbProvider {
   // going to mark it as async
   Future<int> addItem(ItemModel item) {
     return db.insert('items', item.toMapForDb());
+  }
+
+  // not implemented in the course
+  // TODO: fetch and store top ids
+  Future<List<int>> fetchTopIds() {
+    return null;
   }
 }
