@@ -1,42 +1,37 @@
 import 'package:flutter/material.dart';
+import '../blocs/stories_provider.dart';
 
 class NewsList extends StatelessWidget {
   Widget build(context) {
+    final bloc = StoriesProvider.of(context);
+
+    bloc.fetchTopIds();
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Top news'),
+        title: Text('Top News'),
       ),
-      body: buildList(),
+      body: buildList(bloc),
     );
   }
 
-  Widget buildList() {
-      return ListView.builder(
-        itemCount: 1000,
-
-        // represents each item that will be built
-        // this works like a lazy loader because we can render it
-        // conditionally
-        itemBuilder: (context, int index) {
-          return FutureBuilder(
-            future: getFuture(),
-            builder: (context, snapshot) {
-              return Container(
-                height: 80.0,
-                child: snapshot.hasData
-              ? Text("I'm visible, $index")
-              : Text("I haven't fetched data yet $index"),
-              );
-            },
+  Widget buildList(StoriesBloc bloc) {
+    return StreamBuilder(
+      stream: bloc.topIds,
+      builder: (context, AsyncSnapshot<List<int>> snapshot) {
+        if (!snapshot.hasData) {
+          return Center(
+            child: CircularProgressIndicator(),
           );
-        },
-      );
-  }
+        }
 
-  Future<String> getFuture() {
-    return Future.delayed(
-      Duration(seconds: 2),
-      () => 'Hi'
+        return ListView.builder(
+          itemCount: snapshot.data.length,
+          itemBuilder: (context, int index) {
+            return Text(snapshot.data[index].toString());
+          },
+        );
+      },
     );
   }
 }
