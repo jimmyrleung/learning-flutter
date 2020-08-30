@@ -33,6 +33,7 @@ dependencies:
   http: any
   test: any
   characters: any
+  rxdart: ^0.22.0
 
 dev_dependencies:
   flutter_test:
