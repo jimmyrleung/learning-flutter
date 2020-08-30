@@ -18,7 +18,7 @@ class NewsDbProvider implements Source, Cache {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
 
     // join the paths to generate the db path
-    final path = join(documentsDirectory.path, 'items.db');
+    final path = join(documentsDirectory.path, 'items2.db');
 
     // Tries to either create the db (if not exists) or open it (if exists)
     db = await openDatabase(path,
@@ -27,7 +27,7 @@ class NewsDbProvider implements Source, Cache {
       // here we can do a little setup in our recently created db
       // it runs only in the first time that the user opens our app
       // """ allows you to create a multiline string
-      newDb.execute(""" 
+      newDb.execute("""
           CREATE TABLE items (
             id INTEGER PRIMARY KEY,
             type TEXT,
@@ -42,7 +42,7 @@ class NewsDbProvider implements Source, Cache {
             score INTEGER,
             title TEXT,
             descendants INTEGER
-          )
+          );
         """);
     });
   }
@@ -66,6 +66,7 @@ class NewsDbProvider implements Source, Cache {
   // We won't wait for the item to be added, so we are not
   // going to mark it as async
   Future<int> addItem(ItemModel item) {
+    print(item.toString());
     return db.insert('items', item.toMapForDb());
   }
 

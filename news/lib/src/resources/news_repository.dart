@@ -47,7 +47,7 @@ class NewsRepository {
     }
 
     for (var cache in caches) {
-      cache.addItem(item);
+      // cache.addItem(item);
     }
 
     return item;

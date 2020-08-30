@@ -5,30 +5,31 @@ import '../resources/news_repository.dart';
 class StoriesBloc {
   final _repository = NewsRepository();
   final _topIds = PublishSubject<List<int>>();
-  final _items = BehaviorSubject<int>(); 
-
-  // This is the final result of a transformed stream
-  // It has the cached map
-  Observable<Map<int, Future<ItemModel>>> items;
+  final _itemsOutput = BehaviorSubject<Map<int, Future<ItemModel>>>();
+  final _itemsFetcher = PublishSubject<int>();
 
   Observable<List<int>> get topIds => _topIds.stream;
+  Observable<Map<int, Future<ItemModel>>> get items => _itemsOutput.stream;
 
   fetchTopIds() async {
     final ids = await _repository.fetchTopIds();
     _topIds.sink.add(ids);
   }
 
-  Function(int) get fetchItem => _items.sink.add;
+// Our items fetcher receive the fetch command
+  Function(int) get fetchItem => _itemsFetcher.sink.add;
 
   StoriesBloc() {
-    // Here's our cache is created
-    // This returns a new stream reference that is transformed
-    // This stream is the one that we want to expose
-    items = _items.stream.transform(_itemsTransformer());
+    // to prevent multiple duplicated events, we pipe the result of itemsFetcher
+    // to our itemsOutput stream, so itemsOutput will receive the latest result
+    // from itemsFetcher and return to any item that want to consume our cached maps
+    _itemsFetcher.stream.transform(_itemsTransformer()).pipe(_itemsOutput);
   }
 
   // should be executed only once, otherwise we'll have a individual cache
   // for each element (definitely not what we want)
+  // This is needed because we have stateless widgets that consume our stream,
+  // and since they're stateless they can't keep item data
   _itemsTransformer() {
     return ScanStreamTransformer(
       // Will be executed whenever a new item arrives
@@ -43,6 +44,7 @@ class StoriesBloc {
 
   dispose() {
     _topIds.close();
-    _items.close();
+    _itemsOutput.close();
+    _itemsFetcher.close();
   }
 }
