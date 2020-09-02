@@ -30,7 +30,7 @@ class ItemModel {
     url = parsedJson['url'],
     score = parsedJson['score'],
     title = parsedJson['title'],
-    descendants = parsedJson['descendants'];
+    descendants = parsedJson['descendants'] ?? 0;
 
   ItemModel.fromDb(Map<String, dynamic> parsedJson)
   : id = parsedJson['id'], 
@@ -38,7 +38,7 @@ class ItemModel {
     type = parsedJson['type'],
     by = parsedJson['by'],
     time = parsedJson['time'],
-    text = parsedJson['text'],
+    text = parsedJson['text'] ?? '',
     dead = parsedJson['dead'] == 1,
     parent = parsedJson['parent'],
     kids = jsonDecode(parsedJson['kids']),
@@ -63,10 +63,5 @@ class ItemModel {
       'deleted': deleted ? 1 : 0,
       'kids': jsonEncode(kids),
     };
-  }
-
-  @override
-  String toString() {
-    return '$id - $type - $by - $url';
-  }
+  } 
 }

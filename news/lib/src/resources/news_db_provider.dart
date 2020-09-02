@@ -27,8 +27,7 @@ class NewsDbProvider implements Source, Cache {
       // here we can do a little setup in our recently created db
       // it runs only in the first time that the user opens our app
       // """ allows you to create a multiline string
-      newDb.execute("""
-          CREATE TABLE items (
+      newDb.execute('''CREATE TABLE items (
             id INTEGER PRIMARY KEY,
             type TEXT,
             by TEXT,
@@ -42,9 +41,10 @@ class NewsDbProvider implements Source, Cache {
             score INTEGER,
             title TEXT,
             descendants INTEGER
-          );
-        """);
+          );''');
     });
+
+    print ('db created');
   }
 
   Future<ItemModel> fetchItem(int id) async {
@@ -66,8 +66,14 @@ class NewsDbProvider implements Source, Cache {
   // We won't wait for the item to be added, so we are not
   // going to mark it as async
   Future<int> addItem(ItemModel item) {
-    print(item.toString());
-    return db.insert('items', item.toMapForDb());
+    final itemForDb = item.toMapForDb();
+
+    final itemForDbList = itemForDb.values.toList();
+
+    for(var i = 0; i < itemForDbList.length; i++) {
+      print(itemForDbList[i]);
+    }
+    return db.insert('items', item.toMapForDb(), conflictAlgorithm: ConflictAlgorithm.ignore);
   }
 
   // not implemented in the course

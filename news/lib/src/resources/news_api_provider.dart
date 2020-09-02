@@ -16,7 +16,7 @@ class NewsApiProvider implements Source {
   }
 
   Future<ItemModel> fetchItem(int id) async {
-    var mock = {
+    var parsedJson = {
       "by": "dhouston",
       "descendants": 71,
       "id": 8863,
@@ -63,15 +63,18 @@ class NewsApiProvider implements Source {
     };
 
     try {
-      print('will fetch item $id');
-      print('$_baseURL/$id.json');
       // permission denied error
       // final response = await client.get('$_baseURL/$id.json');
       // print(response.body);
       // final parsedJson = json.decode(response.body);
       // final parsedJson = json.decode()
-      mock["id"] = id;
-      return ItemModel.fromJson(mock);
+
+      // USING MOCK BECAUSE HACKER NEWS API IS OFF
+      parsedJson["id"] = id;
+
+      //simulate loading when using mock
+      await Future.delayed(Duration(seconds: 1));
+      return ItemModel.fromJson(parsedJson);
     } catch (err) {
       print(err.toString());
     }

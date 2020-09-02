@@ -47,6 +47,7 @@ class NewsRepository {
     }
 
     for (var cache in caches) {
+      // TODO: fix sqlite addItem error
       // cache.addItem(item);
     }
 
