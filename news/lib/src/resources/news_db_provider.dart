@@ -56,7 +56,7 @@ class NewsDbProvider implements Source, Cache {
         );
 
     if (maps.length > 0) {
-      ItemModel.fromDb(maps.first);
+      return ItemModel.fromDb(maps.first);
     }
 
     // nothing has been found
