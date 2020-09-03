@@ -6,6 +6,7 @@ import '../models/item_model.dart';
 // Abstract classes in flutter works as interfaces
 abstract class Cache {
   Future<int> addItem(ItemModel item);
+  Future<void> clear();
 }
 
 abstract class Source {
@@ -52,5 +53,11 @@ class NewsRepository {
     }
 
     return item;
+  }
+
+  Future<void> clearCache() async {
+    for (var cache in caches) {
+      await cache.clear();
+    } 
   }
 }

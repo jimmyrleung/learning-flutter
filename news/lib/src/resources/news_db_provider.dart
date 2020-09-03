@@ -82,6 +82,10 @@ class NewsDbProvider implements Source, Cache {
     return null;
   }
 
+  Future<int> clear() {
+    return db.delete("items");
+  }
+
 }
 
 // This works like a singleton
