@@ -24,8 +24,9 @@ class App extends StatelessWidget {
     } else {
       return MaterialPageRoute(builder: (context) {
         // here's a great place to do initialization
-        // or data fetching
-        return NewsDetail();
+        // or data fetching or formatting, etc
+        final itemId = int.parse(settings.name.replaceFirst('/news/', ''));
+        return NewsDetail(itemId: itemId);
       });
     }
   }
