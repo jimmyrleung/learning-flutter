@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 import 'screens/news_list.dart';
 import 'screens/news_detail.dart';
 import 'blocs/stories_provider.dart';
+import 'blocs/comments_provider.dart';
 
 class App extends StatelessWidget {
   Widget build(context) {
-    // Now our StoriesProvider is available for everything inside MaterialApp
-    return StoriesProvider(
-      child: MaterialApp(
-        title: 'News',
-        //home: NewsList(),
-        onGenerateRoute: routes,
+    // Now StoriesProvider and CommentsProvider are available for everything inside MaterialApp
+    return CommentsProvider(
+      child: StoriesProvider(
+        child: MaterialApp(
+          title: 'News',
+          onGenerateRoute: routes,
+        ),
       ),
     );
   }
@@ -25,7 +27,11 @@ class App extends StatelessWidget {
       return MaterialPageRoute(builder: (context) {
         // here's a great place to do initialization
         // or data fetching or formatting, etc
+        final commentsbloc = CommentsProvider.of(context);
         final itemId = int.parse(settings.name.replaceFirst('/news/', ''));
+
+        commentsbloc.fetchItemWithComments(itemId);
+
         return NewsDetail(itemId: itemId);
       });
     }

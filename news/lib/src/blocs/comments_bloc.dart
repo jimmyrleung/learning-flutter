@@ -22,11 +22,15 @@ class CommentsBloc {
   }
 
   _commentsTransformer() {
-    return ScanStreamTransformer<int,  Map<int, Future<ItemModel>>>(
+    return ScanStreamTransformer<int, Map<int, Future<ItemModel>>>(
       (cache, int id, index) {
         cache[id] = _repository.fetchItem(id);
+
         cache[id].then((ItemModel item) {
-          item.kids.forEach((kidId) => fetchItemWithComments(kidId));
+          item.kids.forEach((kidId) {
+            print(kidId.toString());
+            return fetchItemWithComments(kidId);
+          });
         });
 
         return cache;
