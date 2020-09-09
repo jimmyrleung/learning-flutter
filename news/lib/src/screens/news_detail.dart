@@ -29,6 +29,8 @@ class NewsDetail extends StatelessWidget {
 
         final itemFuture = snapshot.data[itemId];
 
+        // Top level story loaded - now we can load the comments
+
         return FutureBuilder(
           future: itemFuture,
           builder: (context, AsyncSnapshot<ItemModel> itemSnapshot) {
@@ -36,10 +38,18 @@ class NewsDetail extends StatelessWidget {
               return Text('Loading...');
             }
 
-            return buildTitle(itemSnapshot.data);
+            return buildList(itemSnapshot.data, snapshot.data);
           },
         );
       },
+    );
+  }
+
+  Widget buildList(ItemModel item, Map<int, Future<ItemModel>> snapshot) {
+    return ListView(
+      children: <Widget>[
+        buildTitle(item),
+      ],
     );
   }
 
