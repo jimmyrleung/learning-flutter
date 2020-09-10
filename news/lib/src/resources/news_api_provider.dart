@@ -54,7 +54,7 @@ class NewsApiProvider implements Source {
     var mockJson = {
       "by": "dhouston",
       "descendants": 71,
-      "id": 8863,
+      "id": 0,
       "kids": [],
       "score": 111,
       "time": 1175714200,
@@ -67,6 +67,8 @@ class NewsApiProvider implements Source {
     // DUE TO HACKER NEWS PROBLEM
     if(!listOfKids.contains(id)) {
       mockJson["kids"] = listOfKids;
+    } else {
+      mockJson["text"] = "Comment for kid $id";
     }
 
     try {
