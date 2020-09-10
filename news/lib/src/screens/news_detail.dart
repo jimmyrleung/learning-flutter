@@ -57,6 +57,10 @@ class NewsDetail extends StatelessWidget {
     return ListView(
       children: <Widget>[
         buildTitle(item),
+        Container(
+          margin: EdgeInsets.only(left: 10.0),
+          child: Text('Comments'),
+        ),
         ...commentsList,
       ],
     );
