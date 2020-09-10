@@ -21,6 +21,10 @@ class App extends StatelessWidget {
     // with more routes you might need a switch/case statement
     if (settings.name == "/") {
       return MaterialPageRoute(builder: (context) {
+        final storiesBloc = StoriesProvider.of(context);
+
+        storiesBloc.fetchTopIds();
+
         return NewsList();
       });
     } else {
